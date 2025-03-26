@@ -8,11 +8,28 @@ const removeColumn = document.querySelector('.remove-column');
 const table = document.querySelector('.field');
 let tbody = table.querySelector('tbody');
 
-if (!tbody) {
-  tbody = document.createElement('tbody');
+document.addEventListener('DOMContentLoaded', () => {
+  if (!tbody) {
+    tbody = document.createElement('tbody');
 
-  table.appendChild(tbody);
-}
+    table.appendChild(tbody);
+  }
+
+  if (tbody.children.length === 0) {
+    const firstTr = document.createElement('tr');
+    const firstTd = document.createElement('td');
+
+    firstTr.appendChild(firstTd);
+
+    tbody.appendChild(firstTr);
+  }
+
+  const firstRow = table.querySelector('tr');
+  const firstRowChildren = firstRow.querySelectorAll('td');
+
+  removeRow.disabled = tbody.children.length <= 2;
+  removeColumn.disabled = firstRowChildren.length <= 2;
+});
 
 appendRow.addEventListener('click', () => {
   const tr = tbody.querySelector('tr');
@@ -34,6 +51,8 @@ appendRow.addEventListener('click', () => {
 
 removeRow.addEventListener('click', () => {
   const updatedRows = tbody.querySelectorAll('tr');
+
+  removeRow.disabled = updatedRows.length <= 2;
 
   if (updatedRows.length > 2) {
     tbody.lastElementChild.remove();
